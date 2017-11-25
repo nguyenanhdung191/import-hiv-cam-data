@@ -1,0 +1,14 @@
+{
+	"teiMapping":{
+		"columnname":"attributeID",
+		"columnname":"attributeID"
+	},
+	"investigationStage":{
+		"programStageId":"idcuaprogramstage"
+		"TenColumn": "iddataelement"
+	},
+	"medicine":{
+		"programStageId":"idcuaprogramstage"
+		"TenColumn": "iddataelement"
+	}
+}
