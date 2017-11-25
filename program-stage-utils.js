@@ -27,8 +27,8 @@ const createEventObject = (exc, data) => {
     let temp;
     if (data.hasOwnProperty(exc.PatientID)) {
         temp = {
-            "programStage": "",
-            "orgUnit": "",
+            "programStage": config[nameofExcelfile.split()].programStageId,
+            "orgUnit": nameofExcelfile.split(),
             "program": "",
             "trackedEntityInstance": data[exc.PatientID].trackedEntityInstance,
             "enrollment": data[exc.PatientID].Enrollment,
@@ -40,7 +40,7 @@ const createEventObject = (exc, data) => {
 
         for (z in exc) {
             const dataval = {
-                "dataElement": z,
+                "dataElement": config[nameofExcelfile.split()][z],
                 "value": exc[z]
             };
             temp.dataValues.push(dataval);

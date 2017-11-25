@@ -1,14 +1,33 @@
 {
-	"teiMapping":{
-		"columnname":"attributeID",
-		"columnname":"attributeID"
-	},
-	"investigationStage":{
-		"programStageId":"idcuaprogramstage",
-		"TenColumn": "iddataelement"
-	},
-	"medicine":{
-		"programStageId":"idcuaprogramstage",
-		"TenColumn": "iddataelement"
-	}
+    "teiMapping":
+    {
+        "columnname": "attributeID",
+        "columnname": "attributeID"
+    },
+    "Investigation":
+    {
+        "programStageId": "jNH9CMNG2cP",
+        "TenColumn": "iddataelement"
+    },
+    "Medicine":
+    {
+        "programStageId": "jgSMkUFrxCy",
+        "TenColumn": "iddataelement"
+    },
+    "Staging":
+    {
+        "programStageId": "iYMQLPF8C2F",
+        "TenColumn": "iddataelement"
+    },
+    "Notification":
+    {
+        "programStageId": "QDk8WcnqDYp",
+        "TenColumn": "iddataelement"
+    },
+    "FollowUp":
+    {
+        "programStageId": "DCnzotEui3B",
+        "TenColumn": "iddataelement"
+    }
+
 }
