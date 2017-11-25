@@ -4,11 +4,11 @@
 		"columnname":"attributeID"
 	},
 	"investigationStage":{
-		"programStageId":"idcuaprogramstage"
+		"programStageId":"idcuaprogramstage",
 		"TenColumn": "iddataelement"
 	},
 	"medicine":{
-		"programStageId":"idcuaprogramstage"
+		"programStageId":"idcuaprogramstage",
 		"TenColumn": "iddataelement"
 	}
 }
