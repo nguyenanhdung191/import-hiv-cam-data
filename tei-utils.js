@@ -81,10 +81,7 @@ const generateTeiEnrEvent = () => {
                 trackedEntityInstance: teiId,
                 enrollment: enrId,
                 eventDate: "2017-11-26T00:00:00.000",
-                dataValues: [{
-                    dataElement: "Yjui7Uleimh",
-                    value: "23",
-                }]
+                dataValues: []
             }
             Object.keys(Investigation).forEach(column => {
                 if (patient.hasOwnProperty(column)) {
