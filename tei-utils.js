@@ -95,13 +95,23 @@ const generateTeiEnrEvent = () => {
                                 value: patient[column] + ""
                             });
                         }
+                    } else if (Investigation[column].valueType === "DATE") {
+                        if ((patient[column] + "") !== "") {
+                            let day = patient[column].split("/")[0];
+                            let month = patient[column].split("/")[1];
+                            let year = patient[column].split("/")[2];
+                            let value = moment(`${day}-${month}-${year}`).format("YYYY-MM-DD");
+                            event.dataValues.push({
+                                dataElement: Investigation[column].id,
+                                value: value
+                            });
+                        }
                     } else {
                         event.dataValues.push({
                             dataElement: Investigation[column].id,
-                            value: patient[column] + ""
+                            value: patient[column] + "",
                         });
                     }
-
                 }
             });
             eventList.push(event);

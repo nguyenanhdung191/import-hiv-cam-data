@@ -29,7 +29,7 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
             if (exc.hasOwnProperty(column)) {
                 if (stagenameConfig[column].valueType === "BOOLEAN") {
                     if (exc[column].toString() !== "0") {
-                        event.dataValues.push({
+                        temp.dataValues.push({
                             dataElement: stagenameConfig[column].id,
                             value: exc[column].toString()
                         });
