@@ -36,16 +36,24 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
                     }
                 } else {
                     if (stagenameConfig[column].valueType === "DATE") {
+
+                        if (exc[column].toString() !== "") {
+                            let day = exc[column].split("/")[0];
+                            let month = exc[column].split("/")[1];
+                            let year = exc[column].split("/")[2];
+                            let value = moment(`${day}-${month}-${year}`).format("YYYY-MM-DD");
+                            temp.dataValues.push({
+                                dataElement: stagenameConfig[column].id,
+                                value: value
+                            });
+                        }
+
+                    } else {
                         temp.dataValues.push({
-                            dataElement: stagenameConfig[column],
-                            value: moment(exc[column].toString()).format("YYYY-MM-DD")
-                        });
-                    }else{
-                        temp.dataValues.push({
-                            dataElement: stagenameConfig[column],
+                            dataElement: stagenameConfig[column].id,
                             value: exc[column].toString()
                         });
-                    }               
+                    }
                 }
             }
         });
