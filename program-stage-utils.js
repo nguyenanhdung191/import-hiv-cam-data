@@ -83,7 +83,7 @@ const generate4StagesEvent = () => {
                 let eventId = generateUid();
                 event.push(createEventObject(sl, data, eventId, ou, stagename));
             })
-            event = _.chunk(event, 5000);
+            event = _.chunk(event, 15000);
             let eventIndex = 1;
             event.forEach(list => {
                 jsonfile.writeFileSync(`./output/${arrayFolder[i]}/${stage}_output_${eventIndex}.json`, { events: list });
