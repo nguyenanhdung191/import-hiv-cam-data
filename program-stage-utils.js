@@ -4,7 +4,6 @@ const jsonfile = require("jsonfile");
 const _ = require("lodash");
 let arrayFolder = ["followup", "medicine", "notification", "staging"];
 const { generateUid } = require("./utils");
-const data = require("./teiEnrMapping.json");
 
 const createEventObject = (exc, data, eventId, ou, stagename) => {
 
@@ -41,7 +40,9 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
 
 
 const generate4StagesEvent = () => {
-    for (let i = 1; i <= 3; i++) {
+    const data = require("./teiEnrMapping.json");
+    
+    for (let i = 0; i <= 3; i++) {
         let stageFileList = fs.readdirSync(`./input/${arrayFolder[i]}`);
 
         stageFileList.forEach(stage => {
@@ -49,7 +50,6 @@ const generate4StagesEvent = () => {
             let ou = stage.split("_")[0];
             let stagename = stage.split("_")[1];
             stagename = stagename.split(".")[0];
-
             let worksheet = workbook.Sheets[workbook.SheetNames[0]];
             let stageList = xlsx.utils.sheet_to_json(worksheet);
             let event = [];

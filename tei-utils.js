@@ -2,6 +2,7 @@ const xlsx = require("xlsx");
 const fs = require('fs');
 const jsonfile = require("jsonfile");
 const _ = require("lodash");
+const moment = require("moment");
 
 const { teiMapping, Investigation } = require("./config.json");
 const { generateUid } = require("./utils");
@@ -87,10 +88,20 @@ const generateTeiEnrEvent = () => {
             }
             Object.keys(Investigation).forEach(column => {
                 if (patient.hasOwnProperty(column)) {
-                    event.dataValues.push({
-                        dataElement: Investigation[column],
-                        value: patient[column] + ""
-                    });
+                    if (Investigation[column].valueType === "BOOLEAN") {
+                        if ((patient[column] + "") !== "0") {
+                            event.dataValues.push({
+                                dataElement: Investigation[column].id,
+                                value: patient[column] + ""
+                            });
+                        }
+                    } else {
+                        event.dataValues.push({
+                            dataElement: Investigation[column].id,
+                            value: patient[column] + ""
+                        });
+                    }
+
                 }
             });
             eventList.push(event);
@@ -118,6 +129,8 @@ const generateTeiEnrEvent = () => {
     jsonfile.writeFileSync(`./output/enrollment.json`, enrList);
     jsonfile.writeFileSync(`./teiEnrMapping.json`, teiEnrMapping);
 };
+
+generateTeiEnrEvent();
 module.exports = {
     generateTeiEnrEvent
 }
