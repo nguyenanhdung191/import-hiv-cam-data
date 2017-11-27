@@ -2,6 +2,7 @@ const xlsx = require("xlsx");
 const fs = require('fs');
 const jsonfile = require("jsonfile");
 const _ = require("lodash");
+const moment = require('moment');
 let arrayFolder = ["followup", "medicine", "notification", "staging"];
 const { generateUid } = require("./utils");
 
@@ -26,10 +27,26 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
 
         Object.keys(stagenameConfig).forEach(column => {
             if (exc.hasOwnProperty(column)) {
-                temp.dataValues.push({
-                    dataElement: stagenameConfig[column],
-                    value: exc[column] + ""
-                });
+                if (stagenameConfig[column].valueType === "BOOLEAN") {
+                    if (exc[column].toString() !== "0") {
+                        event.dataValues.push({
+                            dataElement: stagenameConfig[column].id,
+                            value: exc[column].toString()
+                        });
+                    }
+                } else {
+                    if (stagenameConfig[column].valueType === "DATE") {
+                        temp.dataValues.push({
+                            dataElement: stagenameConfig[column],
+                            value: moment(exc[column].toString()).format("YYYY-MM-DD")
+                        });
+                    }else{
+                        temp.dataValues.push({
+                            dataElement: stagenameConfig[column],
+                            value: exc[column].toString()
+                        });
+                    }               
+                }
             }
         });
 
@@ -41,7 +58,7 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
 
 const generate4StagesEvent = () => {
     const data = require("./teiEnrMapping.json");
-    
+
     for (let i = 0; i <= 3; i++) {
         let stageFileList = fs.readdirSync(`./input/${arrayFolder[i]}`);
 
