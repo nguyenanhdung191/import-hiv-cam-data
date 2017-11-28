@@ -39,10 +39,18 @@ const generateTeiEnrEvent = () => {
             };
             Object.keys(teiMapping).forEach(column => {
                 if (patient.hasOwnProperty(column)) {
-                    tei.attributes.push({
-                        attribute: teiMapping[column],
-                        value: patient[column] + ""
-                    });
+                    if (teiMapping[column].valueType === "DATE") {
+                        tei.attributes.push({
+                            attribute: teiMapping[column].id,
+                            value: moment(patient[column], "DD/MM/YYYY").format("YYYY-MM-DD")
+                        });
+                    } else {
+                        tei.attributes.push({
+                            attribute: teiMapping[column].id,
+                            value: patient[column] + ""
+                        });
+                    }
+
                 }
             });
             teiList.push(tei);
@@ -92,19 +100,23 @@ const generateTeiEnrEvent = () => {
                         if ((patient[column] + "") !== "0") {
                             event.dataValues.push({
                                 dataElement: Investigation[column].id,
-                                value: patient[column] + ""
+                                value: ((patient[column] + "") === "1") ? true : false
                             });
                         }
                     } else if (Investigation[column].valueType === "DATE") {
                         if ((patient[column] + "") !== "") {
-                            let day = patient[column].split("/")[0];
-                            let month = patient[column].split("/")[1];
-                            let year = patient[column].split("/")[2];
-                            let value = moment(`${day}-${month}-${year}`).format("YYYY-MM-DD");
+                            //let day = patient[column].split("/")[0];
+                            //let month = patient[column].split("/")[1];
+                            //let year = patient[column].split("/")[2];
+                            //let value = moment(`${day}-${month}-${year}`).format("YYYY-MM-DD");
                             event.dataValues.push({
                                 dataElement: Investigation[column].id,
-                                value: value
+                                value: moment(patient[column], "DD/MM/YYYY").format("YYYY-MM-DD")
                             });
+                            //event.dataValues.push({
+                            //    dataElement: Investigation[column].id,
+                            //    value: value
+                            //});
                         }
                     } else {
                         event.dataValues.push({
