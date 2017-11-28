@@ -10,52 +10,57 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
 
     let config = require("./config.json");
     let stagenameConfig = config[stagename];
-
     let temp;
     if (data.hasOwnProperty(exc.PatientID)) {
         temp = {
             "programStage": stagenameConfig.programStageId,
             "orgUnit": ou,
+            "event": eventId,
             "program": "ugLbPc9sYjQ",
             "trackedEntityInstance": data[exc.PatientID].tei,
             "enrollment": data[exc.PatientID].enr,
-            "status": "COMPLETED",
             "eventDate": "2017-11-27T00:00:00.000",
-            "followup": true,
             "dataValues": []
         }
 
         Object.keys(stagenameConfig).forEach(column => {
-            if (exc.hasOwnProperty(column)) {
-                if (stagenameConfig[column].valueType === "BOOLEAN") {
-                    if (exc[column].toString() !== "0") {
-                        temp.dataValues.push({
-                            dataElement: stagenameConfig[column].id,
-                            value: exc[column].toString()
-                        });
-                    }
-                } else {
-                    if (stagenameConfig[column].valueType === "DATE") {
+            if (exc[column] === "")
+                if (exc.hasOwnProperty(column)) {
+                    if (stagenameConfig[column].valueType === "BOOLEAN") {
 
-                        if (exc[column].toString() !== "") {
-                            let day = exc[column].split("/")[0];
-                            let month = exc[column].split("/")[1];
-                            let year = exc[column].split("/")[2];
-                            let value = moment(`${day}-${month}-${year}`).format("YYYY-MM-DD");
+                        if (exc[column] + "" !== "0") {
                             temp.dataValues.push({
                                 dataElement: stagenameConfig[column].id,
-                                value: value
+                                value: ((exc[column].toString()) === "1") ? true : false
                             });
                         }
-
                     } else {
-                        temp.dataValues.push({
-                            dataElement: stagenameConfig[column].id,
-                            value: exc[column].toString()
-                        });
+                        if (stagenameConfig[column].valueType === "DATE") {
+
+                            if (exc[column] + "" !== "") {
+
+                                if(moment(`${patient[column]}`, "DD/MM/YYYY").isValid()){
+                                    temp.dataValues.push({
+                                        dataElement: stagenameConfig[column].id,
+                                        value: moment(exc[column], "DD/MM/YYYY").format("YYYY-MM-DD")
+                                    });
+                                }else{
+                                    temp.dataValues.push({
+                                        dataElement: stagenameConfig[column].id,
+                                        value: moment(exc[column], "MM/DD/YYYY").format("YYYY-MM-DD")
+                                    });
+                                }
+
+                            }
+
+                        } else {
+                            temp.dataValues.push({
+                                dataElement: stagenameConfig[column].id,
+                                value: exc[column] + ""
+                            });
+                        }
                     }
                 }
-            }
         });
 
         return temp;
