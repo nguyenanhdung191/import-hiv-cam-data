@@ -24,11 +24,12 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
         }
 
         Object.keys(stagenameConfig).forEach(column => {
-            if (exc[column] === "")
+            
                 if (exc.hasOwnProperty(column)) {
+                    
                     if (stagenameConfig[column].valueType === "BOOLEAN") {
 
-                        if (exc[column] + "" !== "0") {
+                        if ((exc[column] + "") !== "0") {
                             temp.dataValues.push({
                                 dataElement: stagenameConfig[column].id,
                                 value: ((exc[column].toString()) === "1") ? true : false
@@ -37,9 +38,9 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
                     } else {
                         if (stagenameConfig[column].valueType === "DATE") {
 
-                            if (exc[column] + "" !== "") {
+                            if ((exc[column] + "") !== "") {
 
-                                if(moment(`${patient[column]}`, "DD/MM/YYYY").isValid()){
+                                if(moment(`${exc[column]}`, "DD/MM/YYYY").isValid()){
                                     temp.dataValues.push({
                                         dataElement: stagenameConfig[column].id,
                                         value: moment(exc[column], "DD/MM/YYYY").format("YYYY-MM-DD")
@@ -50,6 +51,8 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
                                         value: moment(exc[column], "MM/DD/YYYY").format("YYYY-MM-DD")
                                     });
                                 }
+
+                                
 
                             }
 
@@ -74,7 +77,7 @@ const generate4StagesEvent = () => {
 
     for (let i = 0; i <= 3; i++) {
         let stageFileList = fs.readdirSync(`./input/${arrayFolder[i]}`);
-
+        let event = [];
         stageFileList.forEach(stage => {
             let workbook = xlsx.readFile(`./input/${arrayFolder[i]}/${stage}`);
             let ou = stage.split("_")[0];
@@ -82,20 +85,23 @@ const generate4StagesEvent = () => {
             stagename = stagename.split(".")[0];
             let worksheet = workbook.Sheets[workbook.SheetNames[0]];
             let stageList = xlsx.utils.sheet_to_json(worksheet);
-            let event = [];
+            
 
             stageList.forEach(sl => {
                 let eventId = generateUid();
                 event.push(createEventObject(sl, data, eventId, ou, stagename));
             })
-            event = _.chunk(event, 15000);
-            let eventIndex = 1;
-            event.forEach(list => {
-                jsonfile.writeFileSync(`./output/${arrayFolder[i]}/${stage}_output_${eventIndex}.json`, { events: list });
-                eventIndex += 1;
-            });
+            // event = _.chunk(event, 50000);
+            // let eventIndex = 1;
+            // event.forEach(list => {
+            //     jsonfile.writeFileSync(`./output/test/${stage}_output_${eventIndex}.json`, { events: list });
+            //     eventIndex += 1;
+            // });
+
+            
 
         });
+        jsonfile.writeFileSync(`./output/test/${arrayFolder[i]}_output_ONEFILE.json`, {events: event});
     }
 };
 
