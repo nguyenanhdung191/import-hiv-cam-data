@@ -52,8 +52,8 @@ const createEventObject = (exc, data, eventId, ou, stagename) => {
                                     });
                                 }
 
-                                
 
+                                
                             }
 
                         } else {
